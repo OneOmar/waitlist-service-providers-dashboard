@@ -1,0 +1,8 @@
+@import 'tailwindcss';
+@import './styles/design-tokens.css';
+
+@layer base {
+  body {
+    @apply bg-surface-page font-sans text-body text-text-primary antialiased;
+  }
+}

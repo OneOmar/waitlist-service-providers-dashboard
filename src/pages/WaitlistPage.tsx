@@ -18,11 +18,20 @@ export function WaitlistPage() {
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
   const [detailRow, setDetailRow] = useState<WaitlistRow | null>(null)
+  const [rows, setRows] = useState<WaitlistRow[]>(() =>
+    waitlistMockRows.map((r) => ({ ...r })),
+  )
 
   const filteredRows = useMemo(
-    () => filterWaitlistRows(waitlistMockRows, appliedFilters, search),
-    [appliedFilters, search],
+    () => filterWaitlistRows(rows, appliedFilters, search),
+    [rows, appliedFilters, search],
   )
+
+  const updateRowStatus = (row: WaitlistRow, status: WaitlistRow['status']) => {
+    setRows((prev) =>
+      prev.map((r) => (r.id === row.id ? { ...r, status } : r)),
+    )
+  }
 
   const pageCount =
     filteredRows.length === 0
@@ -119,6 +128,8 @@ export function WaitlistPage() {
           row={detailRow}
           recordType={recordType}
           onClose={() => setDetailRow(null)}
+          onOnboard={(r) => updateRowStatus(r, 'Onboarded')}
+          onReject={(r) => updateRowStatus(r, 'Rejected')}
         />
       ) : null}
     </>

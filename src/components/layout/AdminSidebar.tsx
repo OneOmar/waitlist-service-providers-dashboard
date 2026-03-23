@@ -167,6 +167,7 @@ export function AdminSidebar() {
             variant="primary"
             size="lg"
             fullWidth
+            className="text-white"
             onClick={() => applyFilters()}
           >
             Filter

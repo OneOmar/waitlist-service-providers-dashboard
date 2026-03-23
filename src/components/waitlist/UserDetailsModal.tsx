@@ -197,7 +197,7 @@ export function UserDetailsModal({
             variant="primary"
             size="pill"
             radius="full"
-            className="min-h-12 flex-1 sm:max-w-xs"
+            className="min-h-12 flex-1 sm:max-w-xs text-white"
             onClick={() => {
               onOnboard?.(row)
               onClose()
@@ -210,7 +210,7 @@ export function UserDetailsModal({
             variant="danger"
             size="pill"
             radius="full"
-            className="min-h-12 flex-1 sm:max-w-xs"
+            className="min-h-12 flex-1 sm:max-w-xs text-white"
             onClick={() => {
               onReject?.(row)
               onClose()

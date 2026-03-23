@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Pencil } from 'lucide-react'
 
 import { Checkbox, IconButton, StatusText, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui'
@@ -15,6 +16,37 @@ function statusTone(status: WaitlistRow['status']) {
 }
 
 export function WaitlistTable({ rows, onEdit }: WaitlistTableProps) {
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(() => new Set())
+
+  useEffect(() => {
+    const valid = new Set(rows.map((r) => r.id))
+    setSelectedIds((prev) => {
+      const next = new Set<string>()
+      for (const id of prev) {
+        if (valid.has(id)) next.add(id)
+      }
+      return next
+    })
+  }, [rows])
+
+  const allSelected =
+    rows.length > 0 && rows.every((row) => selectedIds.has(row.id))
+
+  const toggleAll = () => {
+    setSelectedIds(
+      allSelected ? new Set() : new Set(rows.map((r) => r.id)),
+    )
+  }
+
+  const toggleRow = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
   return (
     <Table>
       <TableHeader>
@@ -24,6 +56,8 @@ export function WaitlistTable({ rows, onEdit }: WaitlistTableProps) {
               label="Select all rows"
               labelClassName="sr-only"
               className="items-center gap-0"
+              checked={allSelected}
+              onChange={toggleAll}
             />
           </TableHead>
           <TableHead>Email</TableHead>
@@ -44,6 +78,8 @@ export function WaitlistTable({ rows, onEdit }: WaitlistTableProps) {
                 label={`Select ${row.email}`}
                 labelClassName="sr-only"
                 className="items-center gap-0"
+                checked={selectedIds.has(row.id)}
+                onChange={() => toggleRow(row.id)}
               />
             </TableCell>
             <TableCell>{row.email}</TableCell>
